@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+
+<head>
+    <title>AngularJS: UI-Router Nested States and Views</title>
+    <!-- Bootstrap CSS -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body ng-controller="MainCtrl" class="container">
+  <div ui-view></div>
+  
+  <!-- Angular -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <!-- UI-Router -->
+  <script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+  
+  <!-- App Script -->
+  <script>
+    var myapp = angular.module('myapp', ["ui.router"]);
+    myapp.config(function($stateProvider, $urlRouterProvider){
+      
+      // For any unmatched url, send to /route1
+      $urlRouterProvider.otherwise("/tab");
+
+      $stateProvider
+      .state('tab', {
+        url: '/tab',
+        templateUrl: 'tab.html',
+                onEnter: function() {
+                  console.log('parent1 onentr')
+                }
+      })
+      .state('tab.haha', {
+        url: '/haha',
+        templateUrl: 'tab2.html',
+                onEnter: function() {
+                  console.log('haha onentr')
+                }
+      })
+      .state('tab.hehe', {
+        url: '/hehe',
+        templateUrl: 'tab3.html',
+                onEnter: function() {
+                  console.log('hehe onentr')
+                }
+      })
+
+              .state('tab2', {
+                url: '/tab2',
+                templateUrl: 'tab.html',
+                onEnter: function() {
+                  console.log('parent2 onentr')
+                }
+              })
+              .state('tab2.hehe', {
+                url: '/hehe',
+                templateUrl: 'tab3.html',
+                onEnter: function() {
+                  console.log('hehe2 onentr')
+                }
+              })
+    });
+    myapp.controller('MainCtrl', function ($state) {
+//      $state.transitionTo('contacts.list');
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+
+<head>
+  <title>AngularJS: UI-Router Nested States and Views</title>
+  <!-- Bootstrap CSS -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body ng-controller="MainCtrl" class="container">
+<div ui-view></div>
+
+<!-- Angular -->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<!-- UI-Router -->
+<script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+
+<!-- App Script -->
+<script>
+  var myapp = angular.module('myapp', ["ui.router"]);
+  myapp.config(function($stateProvider, $urlRouterProvider){
+
+    // For any unmatched url, send to /route1
+    $urlRouterProvider.otherwise("/tab");
+
+    $stateProvider.state('myState', {
+      url: '/tab',
+      templateUrl: 'tab.html',
+      resolve:{
+
+        // Example using function with simple return value.
+        // Since it's not a promise, it resolves immediately.
+        simpleObj:  function(){
+          return {value: 'simple!'};
+        },
+
+        // Example showing returning of custom made promise
+        greeting: function($q, $timeout){
+          var deferred = $q.defer();
+          $timeout(function() {
+            deferred.resolve('Hello!');
+          }, 1000);
+          return deferred.promise;
+        }
+      },
+
+      // The controller waits for every one of the above items to be
+      // completely resolved before instantiation. For example, the
+      // controller will not instantiate until promiseObj's promise has
+      // been resolved. Then those objects are injected into the controller
+      // and available for use.
+      controller: function($scope, simpleObj, greeting){
+        $scope.simple = simpleObj.value;
+
+        $scope.greeting = greeting;
+      }
+    })
+  });
+  myapp.controller('MainCtrl', function ($state) {
+//      $state.transitionTo('contacts.list');
+  })
+</script>
+
+</body>
+
+</html>

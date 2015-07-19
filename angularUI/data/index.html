@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+
+<head>
+    <title>AngularJS: UI-Router Nested States and Views</title>
+    <!-- Bootstrap CSS -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body ng-controller="MainCtrl" class="container">
+  <div ui-view></div>
+  
+  <!-- Angular -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <!-- UI-Router -->
+  <script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+  
+  <!-- App Script -->
+  <script>
+    var myapp = angular.module('myapp', ["ui.router"]);
+    myapp.config(function($stateProvider, $urlRouterProvider){
+      // For any unmatched url, send to /route1
+      $urlRouterProvider.otherwise("/tab");
+
+      $stateProvider
+      .state('tab', {
+        url: '/tab',
+        templateUrl: 'tab.html',
+        data: {
+          customData1: 5,
+          customData2: "blue"
+        },
+        controller: 'tabController'
+              })
+      .state('tab.haha', {
+        url: '/haha',
+                templateUrl: 'tab2.html',
+        data: {
+          customData2: "red"
+        },
+        controller: 'hahaController'
+      });
+    });
+    myapp.controller('MainCtrl', function ($scope, $state) {
+    }).controller('tabController', function ($scope, $state) {
+      $scope.customData1 = $state.current.data.customData1;
+      $scope.customData2 = $state.current.data.customData2;
+    }).controller('hahaController', function ($scope, $state) {
+      $scope.customData1 = $state.current.data.customData1;
+      $scope.customData2 = $state.current.data.customData2;
+    })
+  </script>
+
+</body>
+
+</html>

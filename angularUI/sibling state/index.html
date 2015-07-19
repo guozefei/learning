@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+
+<head>
+    <title>AngularJS: UI-Router Nested States and Views</title>
+    <!-- Bootstrap CSS -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body ng-controller="MainCtrl" class="container">
+  <div ui-view></div>
+
+  <div ui-view="filters"></div>
+  <div ui-view="tabledata"></div>
+  <div ui-view="graph"></div>
+  
+  <!-- Angular -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <!-- UI-Router -->
+  <script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+  
+  <!-- App Script -->
+  <script>
+    var myapp = angular.module('myapp', ["ui.router"]);
+    myapp.config(function($stateProvider, $urlRouterProvider){
+      
+      // For any unmatched url, send to /route1
+      $urlRouterProvider.otherwise("/");
+      
+      $stateProvider
+      .state('tab', {
+        url: '/tab',
+        template: '<div>tab</div>'
+      })
+      .state('tab.haha', {
+        url: '/haha',
+        template: '<div>haha tab</div>'
+      })
+      .state('tab.test', {
+        url: '/test',
+        template: '<div>test</div>'
+      })
+      .state('tab.test1', {
+        url: '^/test1',
+        view: {
+          '' : {
+            template: '<div>test1</div>'
+          }
+        }
+
+      })
+      .state('report',{
+        url: '/',
+        views: {
+          'filters': {
+            template: '<div>filter</div>'
+          },
+          'tabledata': {
+            template: '<div>table</div>'
+          },
+          'graph': {
+            template: '<div>graph</div>'
+          }
+        }
+
+      });
+    });
+    myapp.controller('MainCtrl', function ($state) {
+//      $state.transitionTo('contacts.list');
+    })
+  </script>
+
+</body>
+
+</html>
